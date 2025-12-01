@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notes App</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f9;
+    }
+
+    button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style-type: none;
+      padding-left: 20px;
+    }
+
+    .note {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 5px;
+      flex-wrap: wrap;
+    }
+
+    .note-button {
+      background-color: transparent;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 10px 5px;
+      flex-shrink: 0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .controls span {
+      cursor: pointer;
+      color: #007BFF;
+      font-size: 16px;
+      margin-right: 6px;
+    }
+
+    .controls span:hover {
+      text-decoration: underline;
+    }
+
+    .child-notes {
+      display: none;
+      padding-left: 40px;
+    }
+
+    .expand-btn {
+      visibility: hidden;
+    }
+
+    .note-button img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 10px 0;
+    }
+
+    .note-button pre {
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+
+    .note-button code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .note-button pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .note-button a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .note-button a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Notes</h1>
+  <!--input type="text" id="filenameInput" placeholder="Enter filename" /-->
+  <button onclick="addNewNote()">➕ Add New Note</button>
+  <button onclick="exportNotes()">📤 Save to File</button>
+  <input type="file" id="fileInput" style="display:none" accept=".json" onchange="importNotes(event)">
+  <button onclick="document.getElementById('fileInput').click()">📥 Load from File</button>
+
+  <ul id="notes"></ul>
+
+  <script>
+    marked.setOptions({
+      breaks: true,
+      gfm: true
+    });
+
+    function renderLatex(text) {
+      // Replace inline math $...$
+      text = text.replace(/\$([^\$]+)\$/g, (match, expr) => {
+        try {
+          return katex.renderToString(expr, { throwOnError: false });
+        } catch (e) {
+          return match;
+        }
+      });
+      
+      // Replace display math $$...$$
+      text = text.replace(/\$\$([^\$]+)\$\$/g, (match, expr) => {
+        try {
+          return katex.renderToString(expr, { displayMode: true, throwOnError: false });
+        } catch (e) {
+          return match;
+        }
+      });
+      
+      return text;
+    }
+
+    function isBase64Image(str) {
+      return str.trim().startsWith('data:image/');
+    }
+
+    function renderContent(content) {
+      //console.log('content: ',content)
+  if (!content) return '';
+
+  let result = '';
+  const sp=content.split('~')
+  //console.log(sp)
+  if (sp.length===1){return }
+  for (let a=0;a<sp.length;a++){
+    if (a%2==0){
+      result+=sp[a]
+    }
+    else{
+      result+=marked.parse(renderLatex(sp[a]))
+    }
+    //console.log('result: ',result)
+  }
+  return result
+}
+
+
+    function createNoteElement(content = 'New Note') {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <div class="note">
+          <div class="note-button" ondblclick="makeEditable(this)" contenteditable="false">${content}</div>
+          <div class="controls">    
+            <span onclick="addSibling(this)"> ☝	 </span>
+            <span onclick="addChild(this)">↳ </span>
+            <span class="expand-btn" onclick="toggleChildren(this)">🔽 </span>
+            <span onclick="deleteNote(this)">❌</span>
+          </div>
+        </div>
+        <ul class="child-notes"></ul>
+      `;
+      return li;
+    }
+
+    function makeEditable(el) {
+      // Store the raw content for editing
+      if (!el.dataset.raw) {
+        el.dataset.raw = el.innerText;
+      }
+      
+      // Show raw content while editing
+      el.innerHTML = el.dataset.raw;
+      el.setAttribute('contenteditable', 'true');
+      setTimeout(()=>el.focus(),10)
+
+      if (!el.dataset.listenerAttached) {
+        el.dataset.listenerAttached = "true";
+
+        el.addEventListener("paste", (e) => {
+          e.preventDefault();
+
+          const clipboardItems = e.clipboardData.items;
+          
+          // Check for images in clipboard
+          for (let i = 0; i < clipboardItems.length; i++) {
+            const item = clipboardItems[i];
+
+            if (item.type.startsWith('image/')) {
+              const file = item.getAsFile();
+              const reader = new FileReader();
+              
+              reader.onload = function(event) {
+                const imgElement = `<img src="${event.target.result}" alt="Pasted Image" style="max-width: 100%; height: auto;">`;
+                document.execCommand("insertHTML", false, imgElement);
+              };
+              reader.readAsDataURL(file);
+              return;
+            }
+          }
+
+          const text = e.clipboardData.getData("text/plain");
+          const urlRegex = /^(https?:\/\/[^\s]+)/;
+
+          if (urlRegex.test(text)) {
+            document.execCommand("insertHTML", false, `<a href="${text}" target="_blank">${text}</a>`);
+          } else {
+            document.execCommand("insertText", false, text);
+          }
+        });
+
+        el.addEventListener("blur", () => {
+          el.setAttribute("contenteditable", "false");
+          // If contains image or link, skip rendering
+          if (el.querySelector('img') || el.querySelector('a')) {
+            //console.log('Image or link found, skipping renderContent()');
+            el.dataset.raw = el.innerHTML;
+            return;
+          }
+          // Store raw content
+          el.dataset.raw = el.innerText || el.innerHTML;
+          //console.log('raw',el.innerHTML)
+          // Render content with markdown blocks
+          const k=renderContent(el.dataset.raw);
+          if (k) el.innerHTML = k;
+          //console.log(el.innerText,el.dataset.raw)
+        });
+      }
+    }
+
+    function toggleChildren(btn) {
+      const li = btn.closest('li');
+      const childList = li.querySelector('.child-notes');
+      if (!childList) return;
+      if (childList.style.display === "none") {
+        childList.style.display = "block";
+        btn.textContent = "▲";
+      } else {
+        childList.style.display = "none";
+        btn.textContent = "🔽";
+      }
+    }
+
+    function addNewNote() {
+      const newNote = createNoteElement();
+      document.getElementById('notes').appendChild(newNote);
+    }
+
+    function addChild(control) {
+      const li = control.closest('li');
+      const childList = li.querySelector('.child-notes');
+      const newChild = createNoteElement();
+      childList.appendChild(newChild);
+      childList.style.display = "block";
+      const expandBtn = li.querySelector('.expand-btn');
+      expandBtn.style.visibility = "visible";
+      expandBtn.textContent = "▲";
+    }
+
+    function addSibling(control) {
+      const li = control.closest('li');
+      const newLi = createNoteElement();
+      li.parentNode.insertBefore(newLi, li);
+    }
+
+    function deleteNote(control) {
+      const li = control.closest('li');
+      li.remove();
+    }
+
+    function getNoteData(ul) {
+      const data = [];
+      for (const li of ul.children) {
+        const noteButton = li.querySelector('.note-button');
+        // Get raw content if available, otherwise get innerHTML
+        const title = noteButton.dataset.raw || noteButton.innerHTML;
+        const childUl = li.querySelector('.child-notes');
+        data.push({
+          title,
+          children: getNoteData(childUl)
+        });
+      }
+      return data;
+    }
+
+    function exportNotes() {
+      //const filenameInput = document.getElementById('filenameInput').value.trim();
+      //filenameInput ? filenameInput : 
+      const filename = 'notes.json';
+
+      const data = getNoteData(document.getElementById('notes'));
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename.endsWith('.json') ? filename : filename + '.json';
+      a.click();
+
+      URL.revokeObjectURL(url);
+    }
+
+    function importNotes(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          const container = document.getElementById('notes');
+          container.innerHTML = '';
+          data.forEach(note => {
+            container.appendChild(buildNoteFromData(note));
+          });
+        } catch (e) {
+          alert('Failed to load notes: Invalid file format.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function buildNoteFromData(item) {
+      const li = createNoteElement(item.title);
+      const noteButton = li.querySelector('.note-button');
+      
+      // Store raw content
+      noteButton.dataset.raw = item.title;
+      
+      // Render content with markdown blocks
+      const k=renderContent(item.title);
+      if (k) noteButton.innerHTML = k;
+      else noteButton.innerHTML=item.title
+      
+      const childUl = li.querySelector('.child-notes');
+
+      for (const child of item.children) {
+        const childLi = buildNoteFromData(child);
+        childUl.appendChild(childLi);
+      }
+
+      // Hide children initially
+      childUl.style.display = 'none';
+
+      if (item.children.length > 0) {
+        const toggleBtn = li.querySelector('.expand-btn');
+        if (toggleBtn) {
+          toggleBtn.style.visibility = 'visible';
+          toggleBtn.textContent = '🔽';
+        }
+      }
+
+      return li;
+    }
+  </script>
+
+</body>
+</html>
