@@ -26,6 +26,7 @@ Features:
 
 - Double-click a note to edit it.
 - Paste images directly with Ctrl+V.
+- Type Markdown within `~ ... ~` and LaTex within `~ $ ... $ ~`
 - Use the buttons to add siblings, add children, expand/collapse, or delete.
 - Export notes to a `.json` file.
 - Import the `.json` file later to restore your notes.
