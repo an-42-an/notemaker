@@ -17,7 +17,7 @@ Features:
 1. **Enable “Ask where to save each file” in your browser settings**  
    This makes the export (Save to File) feature work more smoothly.
 
-2. **Do not put images and markdown inside the same note**  
+2. **Do not put images/links and markdown inside the same note**  
    Keep them in separate notes for best rendering and consistent behavior.
 
 ---
