@@ -20,6 +20,9 @@ Features:
 2. **Do not put images/links and markdown inside the same note**  
    Keep them in separate notes for best rendering and consistent behavior.
 
+3. **Double-clicking a currently editing note takes it back to previous version**
+   This is the only way to undo.
+
 ---
 
 ## How to Use
