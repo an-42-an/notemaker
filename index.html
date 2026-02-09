@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Notes App</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.js" integrity="sha384-+W9OcrYK2/bD7BmUAk+xeFAyKp0QjyRQUCxeU31dfyTt/FrPsUgaBTLLkVf33qWt" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.css" integrity="sha384-Wsr4Nh3yrvMf2KCebJchRJoVo1gTU6kcP05uRSh5NV3sj9+a8IomuJoQzf3sMq4T" crossorigin="anonymous">
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -104,7 +105,6 @@
 <body>
 
   <h1>Notes</h1>
-  <!--input type="text" id="filenameInput" placeholder="Enter filename" /-->
   <button onclick="addNewNote()">➕ Add New Note</button>
   <button onclick="exportNotes()">📤 Save to File</button>
   <input type="file" id="fileInput" style="display:none" accept=".json" onchange="importNotes(event)">
@@ -119,19 +119,19 @@
     });
 
     function renderLatex(text) {
-      // Replace inline math $...$
-      text = text.replace(/\$([^\$]+)\$/g, (match, expr) => {
-        try {
-          return katex.renderToString(expr, { throwOnError: false });
-        } catch (e) {
-          return match;
-        }
-      });
-      
       // Replace display math $$...$$
       text = text.replace(/\$\$([^\$]+)\$\$/g, (match, expr) => {
         try {
           return katex.renderToString(expr, { displayMode: true, throwOnError: false });
+        } catch (e) {
+          return match;
+        }
+      });
+
+      // Replace inline math $...$
+      text = text.replace(/\$([^\$]+)\$/g, (match, expr) => {
+        try {
+          return katex.renderToString(expr, { throwOnError: false });
         } catch (e) {
           return match;
         }
@@ -145,24 +145,24 @@
     }
 
     function renderContent(content) {
-      //console.log('content: ',content)
-  if (!content) return '';
+      console.log('content: ',content)
+      if (!content) return '';
 
-  let result = '';
-  const sp=content.split('~')
-  //console.log(sp)
-  if (sp.length===1){return }
-  for (let a=0;a<sp.length;a++){
-    if (a%2==0){
-      result+=sp[a]
+      let result = '';
+      const sp=content.split('~')
+      console.log(sp)
+      if (sp.length===1){return }
+      for (let a=0;a<sp.length;a++){
+        if (a%2==0){
+          result+=sp[a]
+        }
+        else{
+          result+=marked.parse(renderLatex(sp[a]))
+        }
+        //console.log('result: ',result)
+      }
+      return result
     }
-    else{
-      result+=marked.parse(renderLatex(sp[a]))
-    }
-    //console.log('result: ',result)
-  }
-  return result
-}
 
 
     function createNoteElement(content = 'New Note') {
@@ -191,7 +191,7 @@
       // Show raw content while editing
       el.innerHTML = el.dataset.raw;
       el.setAttribute('contenteditable', 'true');
-      setTimeout(()=>el.focus(),10)
+      setTimeout(()=>el.focus(),10) //Don't remove this, it makes sure rendered latex is shown when blurred
 
       if (!el.dataset.listenerAttached) {
         el.dataset.listenerAttached = "true";
@@ -204,7 +204,7 @@
           // Check for images in clipboard
           for (let i = 0; i < clipboardItems.length; i++) {
             const item = clipboardItems[i];
-
+            // console.log(item,i);
             if (item.type.startsWith('image/')) {
               const file = item.getAsFile();
               const reader = new FileReader();
