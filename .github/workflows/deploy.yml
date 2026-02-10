@@ -1,20 +1,25 @@
-name: Deploy Dev Branch to /dev/
+name: Deploy Dev to Pages
 
 on:
   push:
-    branches:
-      - dev
+    branches: [ dev ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout dev branch
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          folder: .
-          subdirectory: dev
+          path: .
+
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
