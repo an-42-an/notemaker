@@ -2,17 +2,19 @@ name: Deploy Dev Branch to /dev/
 
 on:
   push:
-    branches: [ dev ]
+    branches:
+      - dev
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Deploy index.html
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Checkout dev branch
+        uses: actions/checkout@v3
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
-          publish_branch: gh-pages
-          destination_dir: dev
+          folder: .
+          subdirectory: dev
