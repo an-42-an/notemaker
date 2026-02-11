@@ -45,16 +45,20 @@ function createNoteElement(content = 'New Note') {
     li.dataset.parentId = null;
     li.innerHTML = `
     <div class="note">
-    <div class="note-button" ondblclick="makeEditable(this)" contenteditable="false">${content}</div>
-    <div class="controls">
-    <span onclick="addSibling(this)"> ☝ </span>
-    <span onclick="addChild(this)">↳ </span>
-    <span class="expand-btn" onclick="toggleChildren(this)">🔽 </span>
-    <span onclick="deleteNote(this)">❌</span>
-    </div>
+        <div class="note-button" ondblclick="makeEditable(this)" contenteditable="false">${content}</div>
+        <div class="controls">
+            <span class="toggle-single">☰</span>
+            <div class="note-actions" style="display:none;">
+                <span class="add-sibling" onclick="addSibling(this)"> ☝ </span>
+                <span class="add-child" onclick="addChild(this)">↳ </span>
+                <span class="expand-btn" onclick="toggleChildren(this)">🔽 </span>
+                <span class="delete-note" onclick="deleteNote(this)">❌</span>
+            </div>
+        </div>
     </div>
     <ul class="child-notes"></ul>
     `;
+    selectNote(li);
     return li;
 }
 function makeEditable(el) {

@@ -12,6 +12,34 @@ let searchExpansionSnapshot = null;
 let ocrInFlight = 0;
 let searchResults = [];
 let searchIndex = -1;
+let globalControlsCollapsed = true;
+let selectedNote = null;
+
+document.getElementById("globalToggleControls")
+.addEventListener("click", () => {
+    globalControlsCollapsed = !globalControlsCollapsed;
+    document.querySelectorAll(".controls .note-actions")
+    .forEach(el => {
+        el.style.display = globalControlsCollapsed ? "none" : "inline";
+    });
+});
+document.body.addEventListener("click", e => {
+    if (e.target.matches(".toggle-single")) {
+        const actions = e.target.closest(".controls").querySelector(".note-actions");
+        actions.style.display = actions.style.display === "none" ? "inline" : "none";
+    }
+});
+
+function selectNote(li) {
+    if (selectedNote) selectedNote.classList.remove("selected");
+    selectedNote = li;
+    li.classList.add("selected");
+}
+
+document.body.addEventListener("click", e => {
+    const note = e.target.closest("li");
+    if (note) selectNote(note);
+});
 
 const observer = new MutationObserver(mutations => {
     for (const m of mutations) {

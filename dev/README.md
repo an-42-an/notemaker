@@ -7,23 +7,24 @@ Features:
 - Markdown rendering
 - LaTeX math support (KaTeX)
 - Paste images directly from clipboard
+- OCR on pasted images (searchable text inside images)
+- Full-text search (includes OCR content)
 - Import and export notes as JSON
-- Fully client-side (no backend)
-- Search all your notes, including text present in pasted images
+- Fully client-side (no backend, no data leaves your browser)
 
 ---
 
 ## Important Notes
 
-1. **Enable “Ask where to save each file” in your browser settings**  
+1. **Enable “Ask where to save each file” in your browser settings** 
 
-   This makes the export (Save to File) feature work more smoothly.
+   This makes the export (Save to File) feature work smoothly.
 
-2. **Do not put images/links and markdown inside the same note**  
+2. **Do not put images/links and markdown inside the same note** 
 
-   Keep them in separate notes for best rendering and consistent behavior.
+   Keep them in separate notes for consistent rendering.
 
-3. **Double-clicking a currently editing note takes it back to previous version** 
+3. **Double-clicking a currently editing note reverts it to the previous version** 
 
    This is the only way to undo.
 
@@ -34,9 +35,36 @@ Features:
 - Double-click a note to edit it.
 - Paste images directly with Ctrl+V.
 - Type Markdown within `~ ... ~` and LaTex within `~ $ ... $ ~`
-- Use the buttons to add siblings, add children, expand/collapse, or delete.
+- Use the ☰ button at the top to toggle all controls.
+- Use the ☰ button near each note to toggle all controls of that note.
+- Use keyboard shortcuts or the control buttons to
+  - Add sibling
+  - Add child
+  - Expand / collapse
+  - Delete note
 - Export notes to a `.json` file.
 - Import the `.json` file later to restore your notes.
+
+---
+
+## Keyboard shortcuts
+
+### Creation
+- **Ctrl + Enter** : Create sibling note 
+- **Ctrl + Shift + Enter** : Create child note 
+
+### Deletion
+- **Ctrl + Delete** : Delete selected note 
+
+### Expand / Toggle
+- **Ctrl + Space** : Expand / collapse selected note 
+- **Ctrl + Shift + Space** : Toggle note controls (☰)
+
+### Navigation
+- **Arrow Up** : Select previous sibling 
+- **Arrow Down** : Select next sibling 
+- **Arrow Right** : Select first child 
+- **Arrow Left** : Select parent 
 
 ---
 
