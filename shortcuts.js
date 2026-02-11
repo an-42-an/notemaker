@@ -13,20 +13,20 @@ document.addEventListener("keydown", e => {
         selectedNote.querySelector(".add-sibling").click();
     }
 
-    // delete (Delete)
+    // delete (Ctrl+Delete)
     if (e.ctrlKey && e.key === "Delete") {
         e.preventDefault();
         selectedNote.querySelector(".delete-note").click();
         selectedNote = null;
     }
 
-    // expand/collapse (Space)
+    // expand/collapse (Ctrl+Space)
     if (e.ctrlKey && !e.shiftKey && e.key === " ") {
         e.preventDefault();
         selectedNote.querySelector(".expand-btn")?.click();
     }
 
-    // toggle sidebar
+    // toggle sidebar (Ctrl+Shift+Space)
     if (e.ctrlKey && e.shiftKey && e.key === " ") {
         e.preventDefault();
         selectedNote.querySelector(".toggle-single")?.click();
