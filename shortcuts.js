@@ -1,4 +1,11 @@
 document.addEventListener("keydown", e => {
+    // Tab inside editable note
+    if (e.key === "Tab" && document.activeElement?.isContentEditable) {
+        e.preventDefault();
+        document.execCommand("insertText", false, "    ");
+        return;
+    }
+
     if (!selectedNote) return;
 
     // create child (Ctrl+Shift+Enter)

@@ -34,12 +34,27 @@ function selectNote(li) {
     if (selectedNote) selectedNote.classList.remove("selected");
     selectedNote = li;
     li.classList.add("selected");
+    requestAnimationFrame(() => li.scrollIntoView({ block: 'start' }));
 }
 
 document.body.addEventListener("click", e => {
     const note = e.target.closest("li");
     if (note) selectNote(note);
 });
+// function logCalls(obj) {
+//     for (const key of Object.keys(obj)) {
+//         if (typeof obj[key] === 'function') {
+//             const original = obj[key];
+//             obj[key] = function(...args) {
+//                 console.log(`Called ${key} with`, args);
+//                 return original.apply(this, args);
+//             }
+//         }
+//     }
+// }
+//
+// // Example:
+// logCalls(window); // risky, will wrap all global functions
 
 const observer = new MutationObserver(mutations => {
     for (const m of mutations) {
