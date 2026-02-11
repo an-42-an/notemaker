@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notes App</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.js" integrity="sha384-+W9OcrYK2/bD7BmUAk+xeFAyKp0QjyRQUCxeU31dfyTt/FrPsUgaBTLLkVf33qWt" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.css" integrity="sha384-Wsr4Nh3yrvMf2KCebJchRJoVo1gTU6kcP05uRSh5NV3sj9+a8IomuJoQzf3sMq4T" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <!--<base href="/notemaker/dev/">-->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f9;
+    }
+
+    button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style-type: none;
+      padding-left: 20px;
+    }
+
+    .note {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 5px;
+      flex-wrap: wrap;
+    }
+
+    .note-button {
+      background-color: transparent;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 10px 5px;
+      flex-shrink: 0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .controls span {
+      cursor: pointer;
+      color: #007BFF;
+      font-size: 16px;
+      margin-right: 6px;
+    }
+
+    .controls span:hover {
+      text-decoration: underline;
+    }
+
+    .child-notes {
+      display: none;
+      padding-left: 40px;
+    }
+
+    .expand-btn {
+      visibility: hidden;
+    }
+
+    .note-button img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 10px 0;
+    }
+
+    .note-button pre {
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+
+    .note-button code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .note-button pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .note-button a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .note-button a:hover {
+      text-decoration: underline;
+    }
+    .search-hit {
+      background: yellow;
+    }
+    .search-input {
+      width: 100%;
+      max-width: 420px;
+      padding: 8px 12px;
+      font-size: 14px;
+      line-height: 1.4;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .search-input:focus {
+      border-color: #4f8cff;
+      box-shadow: 0 0 0 2px rgba(79, 140, 255, 0.2);
+    }
+    #searchbar {
+      position: sticky;
+      top: 0;
+      background: #f4f4f9;
+      padding: 8px 0;
+      z-index: 10;
+      border-bottom: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Notes</h1>
+  <button onclick="addNewNote()">➕ Add New Note</button>
+  <button onclick="exportNotes()">📤 Save to File</button>
+  <input type="file" id="fileInput" style="display:none" accept=".json" onchange="importNotes(event)">
+  <button onclick="document.getElementById('fileInput').click()">📥 Load from File</button>
+  <br>
+  <div id="searchbar">
+  <input id="searchInput" class="search-input" placeholder="Search…" oninput="searchNotes(this.value)" />
+  <span id="searchStatus" style="font-size:12px;color:#555;"></span>
+  <button onclick="prevResult()">⬆</button>
+  <button onclick="nextResult()">⬇</button>
+  <div id="ocrStatus" style="margin-top:6px;font-size:12px;color:#555;"></div>
+  </div>
+  <ul id="notes"></ul>
+
+  <script src="main.js"></script>
+  <script src="search.js"></script>
+  <script src="ocr.js"></script>
+  <script src="image.js"></script>
+  <script src="core.js"></script>
+  <script src="functional.js"></script>
+
+</body>
+</html>
