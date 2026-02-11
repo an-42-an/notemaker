@@ -121,5 +121,8 @@ border-bottom: 1px solid #ddd;
 }
 
 li.selected > .note {
-    outline: 2px solid var(--highlight, #4f8cff);
+    outline: 0.5px solid var(--highlight, #4f8cff);
+    background-color: #f0f8ff;
+    border-radius: 4px;
+    transition: background-color 0.2s, border 0.2s;
 }
