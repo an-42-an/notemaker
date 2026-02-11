@@ -1,4 +1,6 @@
 function searchNotes(query) {
+    document.querySelectorAll('#notes li').forEach(li => console.log(li, li.dataset.ocr));
+
     query = query.trim().toLowerCase();
     searchResults = [];
     searchIndex = -1;
@@ -28,19 +30,16 @@ function searchNotes(query) {
     });
 
     const allNotes = document.querySelectorAll('#notes li');
-
     for (const li of allNotes) {
         const btn = li.querySelector('.note-button');
         const rawTitle = btn.dataset.raw || btn.innerText || '';
         const titleNoImages = rawTitle.replace(/<img\s+[^>]*>/gi, '');
-
+        console.log(li);
         const titleText = titleNoImages.toLowerCase();
         const ocrText = (li.dataset.ocr || '').toLowerCase();
-
         const text = titleText + '\n' + ocrText;
 
         if (text.includes(query)) {
-            //console.log(query,text);
             btn.classList.add('search-hit');
             expandAncestors(li);
             searchResults.push(li);
@@ -56,7 +55,7 @@ function updateSearchStatus() {
 function focusResult(i) {
     if (!searchResults.length) return;
     const li = searchResults[i];
-    li.scrollIntoView({ block: 'center' });
+    li.scrollIntoView({ block: 'start' });
     li.querySelector('.note-button')?.focus?.();
 }
 function nextResult() {

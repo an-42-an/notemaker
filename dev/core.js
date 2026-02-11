@@ -83,14 +83,15 @@ function makeEditable(el) {
             // Check for images in clipboard
             for (let i = 0; i < clipboardItems.length; i++) {
                 const item = clipboardItems[i];
-                // console.log(item,i);
                 if (item.type.startsWith('image/')) {
                     const file = item.getAsFile();
                     const reader = new FileReader();
 
                     reader.onload = function(event) {
-                        const imgElement = `<img src="${event.target.result}" alt="Pasted Image" style="max-width: 100%; height: auto;">`;
-                        document.execCommand("insertHTML", false, imgElement);
+                        const src = event.target.result;
+                        const imgHTML = `<img src="${src}" style="max-width:100%;height:auto;">`;
+                        document.execCommand("insertHTML", false, imgHTML);
+
                     };
                     reader.readAsDataURL(file);
                     return;
@@ -114,15 +115,24 @@ function makeEditable(el) {
             if (li && li.dataset.ocr) {
                 delete li.dataset.ocr;
             }
+            // Only run OCR if images exist
+            li.querySelectorAll('img:not([data-ocr-done])').forEach(img => {
+                ocrImageInNote(li, img);
+            });
+
+            // Continue with rendering markdown/content
+            if (!el.querySelector('img') && !el.querySelector('a')) {
+                el.dataset.raw = el.innerText || el.innerHTML;
+                const k = renderContent(el.dataset.raw);
+                if (k) el.innerHTML = k;
+            }
             // If contains image or link, skip rendering
             if (el.querySelector('img') || el.querySelector('a')) {
-                //console.log('Image or link found, skipping renderContent()');
                 el.dataset.raw = el.innerHTML;
                 return;
             }
             // Store raw content
             el.dataset.raw = el.innerText || el.innerHTML;
-            //console.log('raw',el.innerHTML)
             // Render content with markdown blocks
             const k=renderContent(el.dataset.raw);
             if (k) el.innerHTML = k;
@@ -200,7 +210,8 @@ function importNotes(event) {
         }
     };
     reader.readAsText(file);
-}function normalize(node, parentId = null) {
+}
+function normalize(node, parentId = null) {
     node.id ??= crypto.randomUUID()
     node.parentId = parentId
 

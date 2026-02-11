@@ -3,7 +3,7 @@ async function runOCR(imageSrc) {
         imageSrc,
         'eng',
         {
-            //logger: m => console.log(m.status, m.progress)
+            // logger: m => console.log(m.status, m.progress)
         }
     );
 
@@ -14,8 +14,10 @@ async function ocrImageInNote(li, img) {
     img.dataset.ocrDone = '1';
     ocrInFlight++;
     updateOCRStatus();
+    //console.log('going to call runocr');
     const text = await runOCR(img.src);
     li.dataset.ocr = (li.dataset.ocr || '') + '\n' + text;
+    //console.log(li,li.dataset.ocr);
     ocrInFlight--;
     updateOCRStatus();
 }
