@@ -1,5 +1,5 @@
 function searchNotes(query) {
-    document.querySelectorAll('#notes li').forEach(li => console.log(li, li.dataset.ocr));
+    //document.querySelectorAll('#notes li').forEach(li => console.log(li, li.dataset.ocr));
 
     query = query.trim().toLowerCase();
     searchResults = [];
@@ -34,7 +34,7 @@ function searchNotes(query) {
         const btn = li.querySelector('.note-button');
         const rawTitle = btn.dataset.raw || btn.innerText || '';
         const titleNoImages = rawTitle.replace(/<img\s+[^>]*>/gi, '');
-        console.log(li);
+        //console.log(li);
         const titleText = titleNoImages.toLowerCase();
         const ocrText = (li.dataset.ocr || '').toLowerCase();
         const text = titleText + '\n' + ocrText;

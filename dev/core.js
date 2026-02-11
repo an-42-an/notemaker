@@ -115,28 +115,25 @@ function makeEditable(el) {
             if (li && li.dataset.ocr) {
                 delete li.dataset.ocr;
             }
+            //console.log(li.dataset.ocr,'ocr')
             // Only run OCR if images exist
-            li.querySelectorAll('img:not([data-ocr-done])').forEach(img => {
+            li.querySelectorAll('img').forEach(img => {
+                delete img.dataset.ocrDone;
                 ocrImageInNote(li, img);
+                console.log(img)
             });
 
-            // Continue with rendering markdown/content
-            if (!el.querySelector('img') && !el.querySelector('a')) {
-                el.dataset.raw = el.innerText || el.innerHTML;
-                const k = renderContent(el.dataset.raw);
-                if (k) el.innerHTML = k;
-            }
-            // If contains image or link, skip rendering
             if (el.querySelector('img') || el.querySelector('a')) {
                 el.dataset.raw = el.innerHTML;
                 return;
             }
             // Store raw content
             el.dataset.raw = el.innerText || el.innerHTML;
+            //console.log('raw',el.innerHTML);
             // Render content with markdown blocks
             const k=renderContent(el.dataset.raw);
             if (k) el.innerHTML = k;
-            //console.log(el.innerText,el.dataset.raw)
+            //console.log(el.innerText,el.innerHTML,el.dataset.raw)
         });
     }
 }
