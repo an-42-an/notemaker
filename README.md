@@ -9,6 +9,7 @@ Features:
 - Paste images directly from clipboard
 - Import and export notes as JSON
 - Fully client-side (no backend)
+- Search all your notes, including text present in pasted images
 
 ---
 
@@ -44,4 +45,5 @@ Features:
 - HTML, CSS, JavaScript
 - Marked.js for Markdown
 - KaTeX for LaTeX math rendering
+- Tesseract for OCR
 
