@@ -14,12 +14,14 @@ function toggleChildren(btn) {
 function addNewNote() {
     const newNote = createNoteElement();
     document.getElementById('notes').appendChild(newNote);
+    requestAnimationFrame(() => selectNote(newNote));
 }
 
 function addChild(control) {
     const li = control.closest('li');
     const childList = li.querySelector('.child-notes');
     const newChild = createNoteElement();
+    requestAnimationFrame(() => selectNote(newChild));
     // set parentId here
     newChild.dataset.parentId = li.dataset.id;
     childList.appendChild(newChild);
@@ -34,6 +36,7 @@ function addSibling(control) {
     const newLi = createNoteElement();
     newLi.dataset.parentId = li.dataset.parentId;
     li.parentNode.insertBefore(newLi, li);
+    requestAnimationFrame(() => selectNote(newLi));
 }
 
 function deleteNote(control) {
