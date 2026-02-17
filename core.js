@@ -120,7 +120,7 @@ function makeEditable(el) {
             li.querySelectorAll('img').forEach(img => {
                 delete img.dataset.ocrDone;
                 ocrImageInNote(li, img);
-                console.log(img)
+                //console.log(img)
             });
 
             if (el.querySelector('img') || el.querySelector('a')) {
