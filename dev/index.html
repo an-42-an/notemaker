@@ -18,6 +18,9 @@
   <button onclick="exportNotes()">📤 Save to File</button>
   <input type="file" id="fileInput" style="display:none" accept=".json" onchange="importNotes(event)">
   <button onclick="document.getElementById('fileInput').click()">📥 Load from File</button>
+  <a href="https://github.com/an-42-an/notemaker/blob/dev/README.md" target="_blank">
+    <button> 🖮 &nbsp Shortcuts & Usage</button>
+  </a>
   <br>
   <div id="searchbar">
     <input id="searchInput" class="search-input" placeholder="Search…" oninput="searchNotes(this.value)" />

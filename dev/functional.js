@@ -39,6 +39,15 @@ function addSibling(control) {
     requestAnimationFrame(() => selectNote(newLi));
 }
 
+function addAfter(control) {
+    const li = control.closest('li');
+    const newLi = createNoteElement();
+    newLi.dataset.parentId = li.dataset.parentId;
+
+    li.parentNode.insertBefore(newLi, li.nextSibling);
+    requestAnimationFrame(() => selectNote(newLi));
+}
+
 function deleteNote(control) {
     const li = control.closest('li');
     li.remove();

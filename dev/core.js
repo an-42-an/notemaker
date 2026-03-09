@@ -50,6 +50,7 @@ function createNoteElement(content = 'New Note') {
             <span class="toggle-single">☰</span>
             <div class="note-actions" style="display:none;">
                 <span class="add-sibling" onclick="addSibling(this)"> ☝ </span>
+                <span class="add-after" onclick="addAfter(this)"> 👇 </span>
                 <span class="add-child" onclick="addChild(this)">↳ </span>
                 <span class="expand-btn" onclick="toggleChildren(this)">🔽 </span>
                 <span class="delete-note" onclick="deleteNote(this)">❌</span>
