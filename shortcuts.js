@@ -8,16 +8,22 @@ document.addEventListener("keydown", e => {
 
     if (!selectedNote) return;
 
-    // create child (Ctrl+Shift+Enter)
+    // add child (Ctrl+Shift+Enter)
     if (e.ctrlKey && e.shiftKey && e.key === "Enter") {
         e.preventDefault();
         selectedNote.querySelector(".add-child").click();
     }
 
-    // create sibling (Ctrl+Enter)
-    if (e.ctrlKey && !e.shiftKey && e.key === "Enter") {
+    // add sibling (Ctrl+Alt+Enter)
+    if (e.ctrlKey && e.altKey && e.key === "Enter") {
         e.preventDefault();
         selectedNote.querySelector(".add-sibling").click();
+    }
+
+    // add after (Ctrl+Enter)
+    if (e.ctrlKey && !e.shiftKey && !e.altKey && e.key === "Enter") {
+        e.preventDefault();
+        selectedNote.querySelector(".add-after").click();
     }
 
     // delete (Ctrl+Delete)
