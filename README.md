@@ -1,4 +1,4 @@
-# Notes App
+# 📖 Notes App
 
 A lightweight browser-based notes app built using plain HTML, CSS, and JavaScript.
 
@@ -50,7 +50,8 @@ Features:
 ## Keyboard shortcuts
 
 ### Creation
-- **Ctrl + Enter** : Create sibling note 
+- **Ctrl + Enter** : Create sibling note under current note
+- **Ctrl + Alt + Enter** : Create sibling note above current note
 - **Ctrl + Shift + Enter** : Create child note 
 
 ### Deletion
