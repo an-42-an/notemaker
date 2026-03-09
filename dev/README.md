@@ -2,7 +2,7 @@
 
 A lightweight browser-based notes app built using plain HTML, CSS, and JavaScript. 
 
-Essentially a glorified text editor with nested notes, search, and Markdown support.
+Essentially a glorified text editor with nested notes, image search, and Markdown support.
 
 Features:
 - Nested notes (tree structure)
