@@ -1,6 +1,8 @@
 # 📖 Notes App
 
-A lightweight browser-based notes app built using plain HTML, CSS, and JavaScript.
+A lightweight browser-based notes app built using plain HTML, CSS, and JavaScript. 
+
+Essentially a glorified text editor with nested notes, search, and Markdown support.
 
 Features:
 - Nested notes (tree structure)
@@ -32,9 +34,11 @@ Features:
 
 ## How to Use
 
+- Go to [notemaker](https://an-42-an.github.io/notemaker/dev).
+- Click Add New Note to get started.
 - Double-click a note to edit it.
 - Paste images directly with Ctrl+V.
-- Type Markdown within `~ ... ~` and LaTex within `~ $ ... $ ~`
+- Type Markdown within `~ ... ~` and LaTeX within `~ $ ... $ ~`
 - Use the ☰ button at the top to toggle all controls.
 - Use the ☰ button near each note to toggle all controls of that note.
 - Use keyboard shortcuts or the control buttons to
