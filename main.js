@@ -34,7 +34,7 @@ function selectNote(li) {
     if (selectedNote) selectedNote.classList.remove("selected");
     selectedNote = li;
     li.classList.add("selected");
-    requestAnimationFrame(() => li.scrollIntoView({ block: 'start' }));
+    // requestAnimationFrame(() => li.scrollIntoView({ block: 'center' }));
 }
 
 document.body.addEventListener("click", e => {
