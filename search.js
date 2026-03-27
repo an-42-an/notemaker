@@ -32,6 +32,10 @@ function searchNotes(query) {
     const allNotes = document.querySelectorAll('#notes li');
     for (const li of allNotes) {
         const btn = li.querySelector('.note-button');
+        if (!btn){
+            console.log(li);
+            continue;
+        }
         const rawTitle = btn.dataset.raw || btn.innerText || '';
         const titleNoImages = rawTitle.replace(/<img\s+[^>]*>/gi, '');
         //console.log(li);

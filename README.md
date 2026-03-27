@@ -80,3 +80,6 @@ Features:
 - KaTeX for LaTeX math rendering
 - Tesseract for OCR
 
+## Demo
+
+![demo video](assets/demo1_v2.gif)
