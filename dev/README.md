@@ -82,4 +82,4 @@ Features:
 
 ## Demo
 
-<video src="assets/demo1_v2.mp4" controls width="600"></video>
+![demo video](assets/demo1_v2.gif)
