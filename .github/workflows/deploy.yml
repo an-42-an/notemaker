@@ -1,4 +1,4 @@
-name: Deploy Main to /
+name: Deploy Main Branch to /main/
 
 on:
   push:
@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy index.html to /
+      - name: Deploy index.html to /main/
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .
           publish_branch: gh-pages
-          destination_dir: ''
+          destination_dir: main
