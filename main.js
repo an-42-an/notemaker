@@ -41,16 +41,24 @@ function selectNote(li) {
 function beginLink(li){
     if (pendingLinkSource === li) {
         pendingLinkSource = null;
+        document.querySelectorAll('.link-source')
+        .forEach(el => el.classList.remove('link-source'));
         return;
     }
 
     if (!pendingLinkSource) {
         pendingLinkSource = li;
+        document.querySelectorAll('.link-source')
+        .forEach(el => el.classList.remove('link-source'));
+
+        li.classList.add('link-source');
         return;
     }
 
     addLink(pendingLinkSource, li);
     pendingLinkSource = null;
+    document.querySelectorAll('.link-source')
+    .forEach(el => el.classList.remove('link-source'));
 }
 
 document.body.addEventListener("click", e => {
