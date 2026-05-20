@@ -56,6 +56,10 @@ function createNoteElement(content = 'New Note') {
                 <span class="add-child" onclick="addChild(this)">↳ </span>
                 <span class="toggle-links" onclick="toggleLinks(this)">🔗</span>
                 <span class="add-link" onclick="beginLink(this.closest('li'))">+</span>
+                <span class="remove-link"
+                onclick="beginRemoveLink(this.closest('li'))">
+                −
+                </span>
                 <span class="expand-btn" onclick="toggleChildren(this)">🔽 </span>
                 <span class="delete-note" onclick="deleteNote(this)">❌</span>
                 <div class="links-bar" style="display:none"></div>

@@ -10,6 +10,7 @@ let globalControlsCollapsed = true;
 let selectedNote = null;
 let globalLinksCollapsed = false;
 let pendingLinkSource = null;
+let pendingRemoveSource = null;
 
 document.getElementById("globalToggleControls")
 .addEventListener("click", () => {
@@ -59,6 +60,19 @@ function beginLink(li){
     pendingLinkSource = null;
     document.querySelectorAll('.link-source')
     .forEach(el => el.classList.remove('link-source'));
+}
+function beginRemoveLink(li){
+
+    document.querySelectorAll('.remove-link-source')
+    .forEach(el => el.classList.remove('remove-link-source'));
+
+    if (pendingRemoveSource === li) {
+        pendingRemoveSource = null;
+        return;
+    }
+
+    pendingRemoveSource = li;
+    li.classList.add('remove-link-source');
 }
 
 document.body.addEventListener("click", e => {

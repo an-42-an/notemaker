@@ -50,6 +50,14 @@ function addAfter(control) {
 
 function deleteNote(control) {
     const li = control.closest('li');
+    const links = JSON.parse(li.dataset.links || "[]");
+
+    links.forEach(id => {
+        const other = document.querySelector(`[data-id="${id}"]`);
+        if (other) {
+            deleteLink(li, other);
+        }
+    });
     li.remove();
 }
 function toggleSingle(el) {
@@ -78,6 +86,22 @@ function addLink(a,b){
     renderLinks(a);
     renderLinks(b);
 }
+function deleteLink(a, b) {
+    const aid = a.dataset.id;
+    const bid = b.dataset.id;
+
+    let alinks = JSON.parse(a.dataset.links || "[]");
+    let blinks = JSON.parse(b.dataset.links || "[]");
+
+    alinks = alinks.filter(x => x !== bid);
+    blinks = blinks.filter(x => x !== aid);
+
+    a.dataset.links = JSON.stringify(alinks);
+    b.dataset.links = JSON.stringify(blinks);
+
+    renderLinks(a);
+    renderLinks(b);
+}
 function renderLinks(li){
     const bar = li.querySelector('.links-bar');
     const links = JSON.parse(li.dataset.links || "[]");
@@ -94,6 +118,18 @@ function renderLinks(li){
             e.stopPropagation();
             const target = document.querySelector(`[data-id="${id}"]`);
             if (!target) return;
+            if (pendingRemoveSource && li===pendingRemoveSource) {
+
+                deleteLink(
+                    pendingRemoveSource,
+                    target
+                );
+
+                pendingRemoveSource.classList.remove('remove-link-source');
+                pendingRemoveSource = null;
+
+                return;
+            }
             expandAncestors(target);
             target.scrollIntoView({behavior:'smooth', block:'center'});
             selectNote(target);
