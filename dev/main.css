@@ -132,6 +132,10 @@ li.link-source > .note {
     border-radius: 4px;
     transition: background-color 0.2s, border 0.2s;
 }
+li.remove-link-source > .note {
+    background:#ffe5e5;
+    outline:0.5px solid red;
+}
 
 p{
     padding: 0;

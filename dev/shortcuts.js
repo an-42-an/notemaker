@@ -9,13 +9,13 @@ document.addEventListener("keydown", e => {
     if (!selectedNote) return;
 
     // add child (Ctrl+Shift+Enter)
-    if (e.ctrlKey && e.shiftKey && e.key === "Enter") {
+    if (e.ctrlKey && e.shiftKey && !e.altKey && e.key === "Enter") {
         e.preventDefault();
         selectedNote.querySelector(".add-child").click();
     }
 
     // add sibling (Ctrl+Alt+Enter)
-    if (e.ctrlKey && e.altKey && e.key === "Enter") {
+    if (e.ctrlKey && !e.shiftKey && e.altKey && e.key === "Enter") {
         e.preventDefault();
         selectedNote.querySelector(".add-sibling").click();
     }
@@ -27,28 +27,41 @@ document.addEventListener("keydown", e => {
     }
 
     // delete (Ctrl+Delete)
-    if (e.ctrlKey && e.key === "Delete") {
+    if (e.ctrlKey && !e.shiftKey && !e.altKey && e.key === "Delete") {
         e.preventDefault();
         selectedNote.querySelector(".delete-note").click();
         selectedNote = null;
     }
 
     // expand/collapse (Ctrl+Space)
-    if (e.ctrlKey && !e.shiftKey && e.key === " ") {
+    if (e.ctrlKey && !e.shiftKey && !e.altKey && e.key === " ") {
         e.preventDefault();
         selectedNote.querySelector(".expand-btn")?.click();
     }
 
     // toggle sidebar (Ctrl+Shift+Space)
-    if (e.ctrlKey && e.shiftKey && e.key === " ") {
+    if (e.ctrlKey && e.shiftKey && !e.altKey && e.key === " ") {
         e.preventDefault();
         selectedNote.querySelector(".toggle-single")?.click();
     }
 
     // toggle links (Ctrl+Alt+Space)
-    if (e.ctrlKey && e.altKey && e.key === " ") {
+    if (e.ctrlKey && !e.shiftKey && e.altKey && e.key === " ") {
         e.preventDefault();
         selectedNote.querySelector(".toggle-links").click();
+    }
+
+    // add link (Ctrl+Shift+'+')
+    if (e.ctrlKey && e.shiftKey && !e.altKey && e.key === "+") {
+        e.preventDefault();
+        selectedNote.querySelector(".add-link").click();
+    }
+
+    // delete link (Ctrl+Shift+'-')
+    if (e.ctrlKey && e.shiftKey && !e.altKey && e.code === "Minus") {
+        // key==- doesnt work, reduces zoom only
+        e.preventDefault();
+        selectedNote.querySelector(".remove-link").click();
     }
 
     // Down
