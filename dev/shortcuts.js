@@ -45,6 +45,12 @@ document.addEventListener("keydown", e => {
         selectedNote.querySelector(".toggle-single")?.click();
     }
 
+    // toggle links (Ctrl+Alt+Space)
+    if (e.ctrlKey && e.altKey && e.key === " ") {
+        e.preventDefault();
+        selectedNote.querySelector(".toggle-links").click();
+    }
+
     // Down
     if (e.key === "ArrowDown") {
         const next = getNextSibling(selectedNote);

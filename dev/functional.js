@@ -52,3 +52,66 @@ function deleteNote(control) {
     const li = control.closest('li');
     li.remove();
 }
+function toggleSingle(el) {
+    const actions = el
+    .closest(".controls")
+    .querySelector(".note-actions");
+
+    actions.style.display =
+    actions.style.display === "none"
+    ? "inline"
+    : "none";
+}
+function addLink(a,b){
+    const aid = a.dataset.id;
+    const bid = b.dataset.id;
+
+    const alinks = JSON.parse(a.dataset.links || "[]");
+    const blinks = JSON.parse(b.dataset.links || "[]");
+
+    if (!alinks.includes(bid)) alinks.push(bid);
+    if (!blinks.includes(aid)) blinks.push(aid);
+    // console.log(alinks,blinks)
+    a.dataset.links = JSON.stringify(alinks);
+    b.dataset.links = JSON.stringify(blinks);
+
+    renderLinks(a);
+    renderLinks(b);
+}
+function renderLinks(li){
+    const bar = li.querySelector('.links-bar');
+    const links = JSON.parse(li.dataset.links || "[]");
+
+    bar.innerHTML = "";
+
+    links.forEach((id,i)=>{
+        const a = document.createElement('a');
+        a.textContent = i+1;
+        a.href = `#${id}`;
+
+        a.onclick = e=>{
+            e.preventDefault();
+            e.stopPropagation();
+            const target = document.querySelector(`[data-id="${id}"]`);
+            if (!target) return;
+            expandAncestors(target);
+            target.scrollIntoView({behavior:'smooth', block:'center'});
+            selectNote(target);
+        };
+
+        bar.appendChild(a);
+    });
+
+    bar.style.display = globalLinksCollapsed ? "none" : "block";
+}
+function toggleLinks(el) {
+    const li = el.closest('li');
+    const bar = li.querySelector('.links-bar');
+
+    if (!bar) return;
+
+    bar.style.display =
+    bar.style.display === 'none'
+    ? 'block'
+    : 'none';
+}
