@@ -43,18 +43,22 @@ function createNoteElement(content = 'New Note') {
     const actionsDisplay = globalControlsCollapsed ? "none" : "inline";
     // generate id here
     li.dataset.id = crypto.randomUUID();
+    li.id = li.dataset.id;
     li.dataset.parentId = null;
     li.innerHTML =`
     <div class="note">
         <div class="note-button" ondblclick="makeEditable(this)" contenteditable="false">${content}</div>
         <div class="controls">
-            <span class="toggle-single">☰</span>
+            <span class="toggle-single" onclick="toggleSingle(this)">☰</span>
             <div class="note-actions" style="display:${actionsDisplay}">
                 <span class="add-sibling" onclick="addSibling(this)"> ☝ </span>
                 <span class="add-after" onclick="addAfter(this)"> 👇 </span>
                 <span class="add-child" onclick="addChild(this)">↳ </span>
+                <span class="toggle-links" onclick="toggleLinks(this)">🔗</span>
+                <span class="add-link" onclick="beginLink(this.closest('li'))">+</span>
                 <span class="expand-btn" onclick="toggleChildren(this)">🔽 </span>
                 <span class="delete-note" onclick="deleteNote(this)">❌</span>
+                <div class="links-bar" style="display:none"></div>
             </div>
         </div>
     </div>
@@ -68,7 +72,13 @@ function makeEditable(el) {
     if (!el.dataset.raw) {
         el.dataset.raw = el.innerText;
     }
-
+    ['keydown','keyup','keypress','click','mousedown'].forEach(evt => {
+        el.addEventListener(evt, e => {
+            if (el.isContentEditable) {
+                e.stopPropagation();
+            }
+        });
+    });
     // Show raw content while editing
     el.innerHTML = el.dataset.raw;
     el.setAttribute('contenteditable', 'true');
@@ -223,6 +233,9 @@ function buildNoteFromData(item) {
     li.dataset.parentId = item.parentId ?? null;
     if (item.links && item.links.length) {
         li.dataset.links = JSON.stringify(item.links);
+    }
+    else{
+        li.dataset.links = JSON.stringify([]);
     }
     const noteButton = li.querySelector('.note-button');
 

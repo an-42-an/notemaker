@@ -1,9 +1,3 @@
-// import {searchNotes,updateSearchStatus,focusResult,nextResult,prevResult,expandAncestors,captureExpansionState,restoreExpansionState} from './search.js';
-// import {runOCR,ocrImageInNote,ocrImageInNote} from './ocr.js'
-// import {extractImages,hasImage,isBase64Image} from './image.js'
-// import {toggleChildren,addNewNote,addChild,addSibling,deleteNote} from './functional.js'
-// import {renderLatex,renderContent,createNoteElement,   makeEditable,getNoteData,exportNotes,importNotes,normalize,buildNoteFromData} from './core.js'
-
 marked.setOptions({
     breaks: true,
     gfm: true
@@ -14,6 +8,8 @@ let searchResults = [];
 let searchIndex = -1;
 let globalControlsCollapsed = true;
 let selectedNote = null;
+let globalLinksCollapsed = false;
+let pendingLinkSource = null;
 
 document.getElementById("globalToggleControls")
 .addEventListener("click", () => {
@@ -23,38 +19,44 @@ document.getElementById("globalToggleControls")
         el.style.display = globalControlsCollapsed ? "none" : "inline";
     });
 });
-document.body.addEventListener("click", e => {
-    if (e.target.matches(".toggle-single")) {
-        const actions = e.target.closest(".controls").querySelector(".note-actions");
-        actions.style.display = actions.style.display === "none" ? "inline" : "none";
-    }
+document.getElementById("globalToggleLinks")
+.addEventListener("click", () => {
+    globalLinksCollapsed = !globalLinksCollapsed;
+
+    document.querySelectorAll(".links-bar")
+    .forEach(el => {
+        el.style.display =
+        globalLinksCollapsed
+        ? "none"
+        : "block";
+    });
 });
 
 function selectNote(li) {
     if (selectedNote) selectedNote.classList.remove("selected");
     selectedNote = li;
     li.classList.add("selected");
-    // requestAnimationFrame(() => li.scrollIntoView({ block: 'center' }));
+}
+
+function beginLink(li){
+    if (pendingLinkSource === li) {
+        pendingLinkSource = null;
+        return;
+    }
+
+    if (!pendingLinkSource) {
+        pendingLinkSource = li;
+        return;
+    }
+
+    addLink(pendingLinkSource, li);
+    pendingLinkSource = null;
 }
 
 document.body.addEventListener("click", e => {
     const note = e.target.closest("li");
     if (note) selectNote(note);
 });
-// function logCalls(obj) {
-//     for (const key of Object.keys(obj)) {
-//         if (typeof obj[key] === 'function') {
-//             const original = obj[key];
-//             obj[key] = function(...args) {
-//                 console.log(`Called ${key} with`, args);
-//                 return original.apply(this, args);
-//             }
-//         }
-//     }
-// }
-//
-// // Example:
-// logCalls(window); // risky, will wrap all global functions
 
 const observer = new MutationObserver(mutations => {
     for (const m of mutations) {
