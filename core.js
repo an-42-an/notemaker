@@ -166,19 +166,14 @@ function getNoteData(ul) {
     return data;
 }
 function exportNotes() {
-    //const filenameInput = document.getElementById('filenameInput').value.trim();
-    //filenameInput ? filenameInput :
-    const filename = 'notes.json';
-
     const data = getNoteData(document.getElementById('notes'));
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement('a');
     a.href = url;
-    a.download = filename.endsWith('.json') ? filename : filename + '.json';
+    a.download = 'notes.json'
     a.click();
-
     URL.revokeObjectURL(url);
 }
 function importNotes(event) {
@@ -194,14 +189,6 @@ function importNotes(event) {
             container.innerHTML = '';
             data.forEach(note => {
                 const li = buildNoteFromData(note);
-                // li.dataset.id = note.id;
-                // li.dataset.parentId = note.parentId;
-                if (note.links && note.links.length) {
-                    li.dataset.links = JSON.stringify(note.links);
-                }
-                if (note.ocr) {
-                    li.dataset.ocr = note.ocr;
-                }
                 container.appendChild(li);
             });
         } catch (e) {
@@ -210,6 +197,7 @@ function importNotes(event) {
     };
     reader.readAsText(file);
 }
+
 function normalize(node, parentId = null) {
     node.id ??= crypto.randomUUID()
     node.parentId = parentId
