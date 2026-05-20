@@ -6,6 +6,7 @@ Essentially a glorified text editor with nested notes, image search, and Markdow
 
 Features:
 - Nested notes (tree structure)
+- Cross-branch note linking
 - Markdown rendering
 - LaTeX math support (KaTeX)
 - Paste images directly from clipboard
@@ -64,12 +65,17 @@ Features:
 ### Expand / Toggle
 - **Ctrl + Space** : Expand / collapse selected note 
 - **Ctrl + Shift + Space** : Toggle note controls (☰)
+- **Ctrl + Alt + Space** : Toggle note links (🔗)
 
 ### Navigation
 - **Arrow Up** : Select previous sibling 
 - **Arrow Down** : Select next sibling 
 - **Arrow Right** : Select first child 
 - **Arrow Left** : Select parent 
+
+### Links
+- **Ctrl + Shift + `+`** : Add link 
+- **Ctrl + Shift + `-`** : Delete link 
 
 ---
 
