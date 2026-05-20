@@ -40,15 +40,16 @@ function renderContent(content) {
 }
 function createNoteElement(content = 'New Note') {
     const li = document.createElement('li');
+    const actionsDisplay = globalControlsCollapsed ? "none" : "inline";
     // generate id here
     li.dataset.id = crypto.randomUUID();
     li.dataset.parentId = null;
-    li.innerHTML = `
+    li.innerHTML =`
     <div class="note">
         <div class="note-button" ondblclick="makeEditable(this)" contenteditable="false">${content}</div>
         <div class="controls">
             <span class="toggle-single">☰</span>
-            <div class="note-actions" style="display:none;">
+            <div class="note-actions" style="display:${actionsDisplay}">
                 <span class="add-sibling" onclick="addSibling(this)"> ☝ </span>
                 <span class="add-after" onclick="addAfter(this)"> 👇 </span>
                 <span class="add-child" onclick="addChild(this)">↳ </span>
