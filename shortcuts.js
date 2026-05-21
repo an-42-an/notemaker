@@ -65,27 +65,45 @@ document.addEventListener("keydown", e => {
     }
 
     // Down
-    if (e.key === "ArrowDown") {
+    if (!e.ctrlKey && e.key === "ArrowDown") {
         const next = getNextSibling(selectedNote);
         if (next) selectNote(next);
     }
 
     // Up
-    if (e.key === "ArrowUp") {
+    if (!e.ctrlKey && e.key === "ArrowUp") {
         const prev = getPrevSibling(selectedNote);
         if (prev) selectNote(prev);
     }
 
     // Right : first child
-    if (e.key === "ArrowRight") {
+    if (!e.ctrlKey && e.key === "ArrowRight") {
         const child = getFirstChild(selectedNote);
         if (child) selectNote(child);
     }
 
     // Left : parent
-    if (e.key === "ArrowLeft") {
+    if (!e.ctrlKey && e.key === "ArrowLeft") {
         const parent = getParentNote(selectedNote);
         if (parent) selectNote(parent);
     }
 
+    // Shift below parent : Ctrl+Left
+    if (e.ctrlKey && e.key === "ArrowLeft") {
+        moveLeft(selectedNote);
+    }
+
+    // Shift inside prev sibling : Ctrl+Right
+    if (e.ctrlKey && e.key === "ArrowRight") {
+        moveRight(selectedNote);
+    }
+
+    // Shift below next sibling : Ctrl+Down
+    if (e.ctrlKey && e.key === "ArrowDown") {
+        moveDown(selectedNote);
+    }
+    // Shift above prev sibling : Ctrl+Up
+    if (e.ctrlKey && e.key === "ArrowUp") {
+        moveUp(selectedNote);
+    }
 });
