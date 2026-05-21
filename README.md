@@ -73,6 +73,13 @@ Features:
 - **Arrow Right** : Select first child 
 - **Arrow Left** : Select parent 
 
+### Move (Structure)
+
+- **Ctrl + Arrow Left** : Move note below parent (left shift)
+- **Ctrl + Arrow Right** : Move note into previous sibling (as child)
+- **Ctrl + Arrow Down** : Move note below next sibling
+- **Ctrl + Arrow Up** : Move note above previous sibling
+
 ### Links
 - **Ctrl + Shift + `+`** : Add link 
 - **Ctrl + Shift + `-`** : Delete link 
