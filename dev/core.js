@@ -206,6 +206,7 @@ function importNotes(event) {
                 container.appendChild(li);
             });
         } catch (e) {
+            console.log(e)
             alert('Failed to load notes: Invalid file format.');
         }
     };
@@ -237,6 +238,7 @@ function buildNoteFromData(item) {
     li.dataset.parentId = item.parentId ?? null;
     if (item.links && item.links.length) {
         li.dataset.links = JSON.stringify(item.links);
+        renderLinks(li);
     }
     else{
         li.dataset.links = JSON.stringify([]);
@@ -249,10 +251,9 @@ function buildNoteFromData(item) {
     const k=renderContent(item.title);
     //console.log(k);
     if (k) noteButton.innerHTML = k;
-    else noteButton.innerHTML=item.title
+    else noteButton.innerHTML=item.title;
 
-        const childUl = li.querySelector('.child-notes');
-
+    const childUl = li.querySelector('.child-notes');
     for (const child of item.children) {
         const childLi = buildNoteFromData(child);
         childLi.dataset.parentId = item.id;
